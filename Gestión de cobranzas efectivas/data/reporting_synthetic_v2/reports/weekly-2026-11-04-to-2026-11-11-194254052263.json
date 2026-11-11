@@ -1,0 +1,245 @@
+{
+  "report_type": "synthetic_collection_period",
+  "period_start": "2026-11-04T00:00:00-05:00",
+  "period_end_exclusive": "2026-11-12T00:00:00-05:00",
+  "timezone": "America/Bogota",
+  "manager_filter": null,
+  "case_count": 1000,
+  "opening_balance_usd": 13727271.18,
+  "closing_balance_usd": 11604330.17,
+  "balance_reduction_usd": 2122941.01,
+  "payments_usd": 2122941.01,
+  "payment_event_count": 369,
+  "payment_case_count": 328,
+  "full_payment_case_count": 19,
+  "partial_payment_case_count": 310,
+  "recovery_rate_pct": 15.47,
+  "commitments_created_count": 339,
+  "commitments_due_count": 215,
+  "commitments_due_by_status": {
+    "cancelled": 11,
+    "kept": 124,
+    "missed": 63,
+    "pending": 17
+  },
+  "commitments_resolved_count": 187,
+  "commitment_kept_rate_pct": 66.31,
+  "channel_attempts_simulated": 570,
+  "channel_counts_simulated": {
+    "email": 109,
+    "phone_call": 117,
+    "sms": 113,
+    "whatsapp_message": 117,
+    "written_notice": 114
+  },
+  "channel_outcomes_simulated": {
+    "draft_created_not_sent": 201,
+    "no_response_simulated": 181,
+    "reply_simulated": 188
+  },
+  "contact_updates_count": 122,
+  "contact_updates_by_field": {
+    "address_token": 41,
+    "email_token": 31,
+    "phone_token": 50
+  },
+  "contact_updates_by_verification": {
+    "synthetic_fixture": 122
+  },
+  "research_findings_count": 109,
+  "aging_cases_at_start": {
+    "DPD_001_030": 59,
+    "DPD_031_060": 60,
+    "DPD_061_090": 60,
+    "DPD_091_120": 60,
+    "DPD_121_180": 120,
+    "DPD_181_360": 360,
+    "DPD_361_560": 279
+  },
+  "aging_cases_at_end": {
+    "CURADO_SIMULADO": 19,
+    "DPD_001_030": 56,
+    "DPD_031_060": 60,
+    "DPD_061_090": 56,
+    "DPD_091_120": 59,
+    "DPD_121_180": 114,
+    "DPD_181_360": 357,
+    "DPD_361_560": 277
+  },
+  "aging_transition_counts": {
+    "DPD_001_030 → CURADO_SIMULADO": 1,
+    "DPD_001_030 → DPD_001_030": 56,
+    "DPD_001_030 → DPD_031_060": 2,
+    "DPD_031_060 → DPD_031_060": 58,
+    "DPD_031_060 → DPD_061_090": 2,
+    "DPD_061_090 → CURADO_SIMULADO": 4,
+    "DPD_061_090 → DPD_061_090": 54,
+    "DPD_061_090 → DPD_091_120": 2,
+    "DPD_091_120 → CURADO_SIMULADO": 1,
+    "DPD_091_120 → DPD_091_120": 57,
+    "DPD_091_120 → DPD_121_180": 2,
+    "DPD_121_180 → CURADO_SIMULADO": 6,
+    "DPD_121_180 → DPD_121_180": 112,
+    "DPD_121_180 → DPD_181_360": 2,
+    "DPD_181_360 → CURADO_SIMULADO": 3,
+    "DPD_181_360 → DPD_181_360": 355,
+    "DPD_181_360 → DPD_361_560": 2,
+    "DPD_361_560 → CURADO_SIMULADO": 4,
+    "DPD_361_560 → DPD_361_560": 275
+  },
+  "manager_breakdown": {
+    "GESTOR-SIM-01": {
+      "cases": 50,
+      "opening_balance_usd": 660359.31,
+      "closing_balance_usd": 574617.04,
+      "payments_usd": 85742.27,
+      "recovery_rate_pct": 12.98
+    },
+    "GESTOR-SIM-02": {
+      "cases": 50,
+      "opening_balance_usd": 693040.33,
+      "closing_balance_usd": 610676.96,
+      "payments_usd": 82363.37,
+      "recovery_rate_pct": 11.88
+    },
+    "GESTOR-SIM-03": {
+      "cases": 50,
+      "opening_balance_usd": 645363.59,
+      "closing_balance_usd": 521383.64,
+      "payments_usd": 123979.95,
+      "recovery_rate_pct": 19.21
+    },
+    "GESTOR-SIM-04": {
+      "cases": 50,
+      "opening_balance_usd": 777823.92,
+      "closing_balance_usd": 630573.34,
+      "payments_usd": 147250.58,
+      "recovery_rate_pct": 18.93
+    },
+    "GESTOR-SIM-05": {
+      "cases": 50,
+      "opening_balance_usd": 741152.08,
+      "closing_balance_usd": 642174.59,
+      "payments_usd": 98977.49,
+      "recovery_rate_pct": 13.35
+    },
+    "GESTOR-SIM-06": {
+      "cases": 50,
+      "opening_balance_usd": 708912.05,
+      "closing_balance_usd": 596616.68,
+      "payments_usd": 112295.37,
+      "recovery_rate_pct": 15.84
+    },
+    "GESTOR-SIM-07": {
+      "cases": 50,
+      "opening_balance_usd": 724582.82,
+      "closing_balance_usd": 661881.68,
+      "payments_usd": 62701.14,
+      "recovery_rate_pct": 8.65
+    },
+    "GESTOR-SIM-08": {
+      "cases": 50,
+      "opening_balance_usd": 629541.46,
+      "closing_balance_usd": 488597.66,
+      "payments_usd": 140943.8,
+      "recovery_rate_pct": 22.39
+    },
+    "GESTOR-SIM-09": {
+      "cases": 50,
+      "opening_balance_usd": 687476.6,
+      "closing_balance_usd": 566418.72,
+      "payments_usd": 121057.88,
+      "recovery_rate_pct": 17.61
+    },
+    "GESTOR-SIM-10": {
+      "cases": 50,
+      "opening_balance_usd": 604033.56,
+      "closing_balance_usd": 511249.38,
+      "payments_usd": 92784.18,
+      "recovery_rate_pct": 15.36
+    },
+    "GESTOR-SIM-11": {
+      "cases": 50,
+      "opening_balance_usd": 707751.17,
+      "closing_balance_usd": 609561.09,
+      "payments_usd": 98190.08,
+      "recovery_rate_pct": 13.87
+    },
+    "GESTOR-SIM-12": {
+      "cases": 50,
+      "opening_balance_usd": 760335.38,
+      "closing_balance_usd": 611598.65,
+      "payments_usd": 148736.73,
+      "recovery_rate_pct": 19.56
+    },
+    "GESTOR-SIM-13": {
+      "cases": 50,
+      "opening_balance_usd": 658888.19,
+      "closing_balance_usd": 542335.61,
+      "payments_usd": 116552.58,
+      "recovery_rate_pct": 17.69
+    },
+    "GESTOR-SIM-14": {
+      "cases": 50,
+      "opening_balance_usd": 674182.83,
+      "closing_balance_usd": 646790.27,
+      "payments_usd": 27392.56,
+      "recovery_rate_pct": 4.06
+    },
+    "GESTOR-SIM-15": {
+      "cases": 50,
+      "opening_balance_usd": 750066.94,
+      "closing_balance_usd": 599191.21,
+      "payments_usd": 150875.73,
+      "recovery_rate_pct": 20.11
+    },
+    "GESTOR-SIM-16": {
+      "cases": 50,
+      "opening_balance_usd": 713444.61,
+      "closing_balance_usd": 587636.68,
+      "payments_usd": 125807.93,
+      "recovery_rate_pct": 17.63
+    },
+    "GESTOR-SIM-17": {
+      "cases": 50,
+      "opening_balance_usd": 627960.6,
+      "closing_balance_usd": 566199.08,
+      "payments_usd": 61761.52,
+      "recovery_rate_pct": 9.84
+    },
+    "GESTOR-SIM-18": {
+      "cases": 50,
+      "opening_balance_usd": 734160.04,
+      "closing_balance_usd": 633549.61,
+      "payments_usd": 100610.43,
+      "recovery_rate_pct": 13.7
+    },
+    "GESTOR-SIM-19": {
+      "cases": 50,
+      "opening_balance_usd": 591809.49,
+      "closing_balance_usd": 487543.23,
+      "payments_usd": 104266.26,
+      "recovery_rate_pct": 17.62
+    },
+    "GESTOR-SIM-20": {
+      "cases": 50,
+      "opening_balance_usd": 636386.21,
+      "closing_balance_usd": 515735.05,
+      "payments_usd": 120651.16,
+      "recovery_rate_pct": 18.96
+    }
+  },
+  "synthetic": true,
+  "simulation": true,
+  "simulation_label": "SIMULACIÓN — NO USAR EN PRODUCCIÓN",
+  "limitations": [
+    "Todas las observaciones son generadas para entrenamiento y no representan resultados reales.",
+    "Los canales son intentos ficticios no enviados; no equivalen a contacto ni entrega.",
+    "La tasa de recuperación es pagos del período / saldo al inicio del período.",
+    "El cumplimiento de compromisos usa compromisos vencidos con estado kept o missed; pendientes y cancelados se excluyen.",
+    "El aging avanza según el reloj de simulación y se limita a 560 días."
+  ],
+  "generated_at": "2026-11-10T19:42:54.052263-05:00",
+  "dataset_version": "reporting-synthetic-v2",
+  "cycle_count": 2
+}

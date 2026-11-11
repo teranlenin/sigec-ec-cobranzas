@@ -1,0 +1,23 @@
+canonical_skill_root: .agents/skills
+source_of_truth: .agents/skills
+adapters:
+  codex:
+    project_instructions: AGENTS.md
+    skill_path: .agents/skills
+    mode: native_or_runtime_discovery
+  claude_code:
+    project_instructions: CLAUDE.md
+    skill_path: .claude/skills
+    mirror_from: .agents/skills
+    sync_command: "python scripts/sync_claude_skills.py --write"
+  gemini_cli:
+    project_instructions: GEMINI.md
+    skill_path: .agents/skills
+    verify_command: "/skills list"
+  gemini_apps:
+    project_instructions: "session-level instructions"
+    skill_path: "manual import of each skill folder or zip"
+    account_upload: manual_only
+shared_policy:
+  simulation_only: true
+  external_actions_enabled: false

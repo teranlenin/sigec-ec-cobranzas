@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Regla sistémica versionada STPR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["rule_id", "title", "jurisdiction", "source_url", "source_type", "scope", "status", "checked_at", "owner"],
+  "properties": {
+    "rule_id": {"type": "string"},
+    "title": {"type": "string"},
+    "jurisdiction": {"const": "EC"},
+    "source_url": {"type": "string", "format": "uri"},
+    "source_type": {"enum": ["official_register", "regulator", "internal_policy", "other_primary"]},
+    "publication_date": {"type": ["string", "null"], "format": "date"},
+    "effective_from": {"type": ["string", "null"], "format": "date"},
+    "effective_to": {"type": ["string", "null"], "format": "date"},
+    "scope": {"type": "string"},
+    "status": {"enum": ["candidate", "checked", "approved_by_human", "superseded", "rejected"]},
+    "checked_at": {"type": "string", "format": "date"},
+    "owner": {"type": "string"},
+    "amendments_reviewed": {"type": "boolean"},
+    "citation_locator": {"type": "string"}
+  }
+}

@@ -1,0 +1,29 @@
+project:
+  id: STPR
+  title: "Especificación técnica del producto requerido — Gestión de cobranzas efectivas"
+  mode: simulation_only
+  timezone: America/Bogota
+  as_of_date: "2026-11-05"
+data:
+  synthetic_only: true
+  allow_personal_data: false
+  require_provenance: true
+  event_log: append_only
+  memory_partition_keys: [case_id, obligation_id]
+  expiry_required_for_agentic_memory: true
+communications:
+  external_delivery_enabled: false
+  allowed_channels_for_simulation: [sms, phone_call, whatsapp_message, whatsapp_call, email, written_notice]
+  output_label: "SIMULACIÓN — NO ENVIAR"
+  third_party_disclosure: false
+  coercive_or_deceptive_content: false
+legal:
+  legal_conclusions_automated: false
+  sources_must_be_official_or_primary: true
+  citation_required: true
+  uncertain_or_disputed_case: abstain_and_escalate
+production:
+  connectors_enabled: false
+  write_enabled: false
+  deployment_authorized: false
+  human_review_required_for_external_effects: true

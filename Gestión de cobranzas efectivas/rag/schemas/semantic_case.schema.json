@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Caso semántico sintético STPR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["case_id", "obligation_id", "synthetic", "simulation", "currency", "amount_usd", "days_past_due", "facts", "dispute_status"],
+  "properties": {
+    "case_id": {"type": "string", "pattern": "^CASE-SYN-[A-Z0-9-]+$"},
+    "obligation_id": {"type": "string", "pattern": "^OBL-SYN-[A-Z0-9-]+$"},
+    "synthetic": {"const": true},
+    "simulation": {"const": true},
+    "client_type": {"enum": ["microenterprise", "small_enterprise"]},
+    "currency": {"const": "USD"},
+    "amount_usd": {"type": "number", "minimum": 15000, "maximum": 60000},
+    "days_past_due": {"type": "integer", "minimum": 120, "maximum": 400},
+    "dispute_status": {"enum": ["none_reported", "open", "resolved_simulated", "unknown"]},
+    "declared_channel_preference": {"enum": ["sms", "phone_call", "whatsapp_message", "whatsapp_call", "email", "written_notice", "not_provided"]},
+    "facts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["field", "value", "source_ref", "verification_status"],
+        "properties": {
+          "field": {"type": "string"},
+          "value": {},
+          "source_ref": {"type": "string"},
+          "verified_at": {"type": "string", "format": "date-time"},
+          "verification_status": {"enum": ["synthetic_fixture", "declared", "observed", "verified", "disputed", "unknown"]}
+        }
+      }
+    },
+    "document_refs": {"type": "array", "items": {"type": "string"}},
+    "simulation_label": {"const": "SIMULACIÓN — NO USAR EN PRODUCCIÓN"}
+  }
+}

@@ -1,0 +1,15 @@
+ID;Área;Criterio observable;Estado inicial
+AC-01;Aislamiento;Sin conectores de entrega ni configuración productiva;PASS por inspección
+AC-02;Datos;Fixtures synthetic=true y sin identificadores/contactos;PENDIENTE validar
+AC-03;Skills;Hay Skill dedicada por agente para diez agentes;PENDIENTE validar
+AC-04;Skills;Tres Skills compartidas complementan y no anulan límites;PENDIENTE validar
+AC-05;RAG;Toda respuesta normativa futura incluye fuente y ubicación;PENDIENTE prueba funcional
+AC-06;RAG;Sin evidencia suficiente el agente se abstiene;PENDIENTE prueba funcional
+AC-07;Mensajería;Cada borrador simulado muestra SIMULACIÓN — NO ENVIAR;PENDIENTE prueba de generación
+AC-08;Memoria;Eventos contienen caso, obligación, source_ref y estado;PENDIENTE validar esquema
+AC-09;Memoria agéntica;No persiste emociones ni atributos sensibles;PENDIENTE prueba
+AC-10;Integridad;Eventos append-only e idempotentes en sandbox;PENDIENTE implementación
+AC-11;Legal;Vigencia y aplicabilidad verificadas por responsable competente;PENDIENTE
+AC-12;Privacidad;Política institucional de datos validada;PENDIENTE
+AC-13;Arneses;Skills descubiertas y límites verificados en Codex, Claude Code y Gemini;PENDIENTE prueba runtime
+AC-14;QA;Validador local termina con código cero;PENDIENTE ejecutar

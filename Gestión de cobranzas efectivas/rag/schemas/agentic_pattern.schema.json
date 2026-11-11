@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Patrón agéntico observable STPR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["pattern_id", "case_id", "obligation_id", "label", "event_refs", "observation_count", "confidence", "observed_from", "observed_to", "expires_at", "synthetic", "simulation", "prohibited_use"],
+  "properties": {
+    "pattern_id": {"type": "string"},
+    "case_id": {"type": "string", "pattern": "^CASE-SYN-[A-Z0-9-]+$"},
+    "obligation_id": {"type": "string", "pattern": "^OBL-SYN-[A-Z0-9-]+$"},
+    "label": {"enum": ["declared_channel_preference", "repeated_response_observed", "repeated_promise_kept_recorded", "repeated_promise_missed_recorded"]},
+    "event_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "observation_count": {"type": "integer", "minimum": 1},
+    "confidence": {"type": "number", "minimum": 0, "maximum": 1},
+    "observed_from": {"type": "string", "format": "date-time"},
+    "observed_to": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "synthetic": {"const": true},
+    "simulation": {"const": true},
+    "review_status": {"enum": ["proposed", "reviewed", "corrected", "expired"]},
+    "prohibited_attributes": {"type": "array", "items": {"type": "string"}, "maxItems": 0},
+    "prohibited_use": {"const": "no_escalation_or_pressure_targeting"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"label": {"const": "declared_channel_preference"}}},
+      "then": {
+        "properties": {
+          "event_refs": {"minItems": 1},
+          "observation_count": {"minimum": 1}
+        }
+      },
+      "else": {
+        "properties": {
+          "event_refs": {"minItems": 2},
+          "observation_count": {"minimum": 2}
+        }
+      }
+    }
+  ]
+}

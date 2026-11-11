@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Evento episódico sintético STPR",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["event_id", "case_id", "obligation_id", "occurred_at", "channel", "event_type", "outcome", "source_ref", "verification_status", "synthetic", "simulation"],
+  "properties": {
+    "event_id": {"type": "string", "pattern": "^EVT-SYN-[A-Z0-9-]+$"},
+    "case_id": {"type": "string", "pattern": "^CASE-SYN-[A-Z0-9-]+$"},
+    "obligation_id": {"type": "string", "pattern": "^OBL-SYN-[A-Z0-9-]+$"},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "channel": {"enum": ["sms", "phone_call", "whatsapp_message", "whatsapp_call", "email", "written_notice", "internal_review"]},
+    "event_type": {"type": "string"},
+    "outcome": {"type": "string"},
+    "source_ref": {"type": "string", "minLength": 1},
+    "verification_status": {"enum": ["synthetic_fixture", "declared", "observed", "verified", "disputed", "unknown"]},
+    "actor": {"type": "string"},
+    "commitment_status": {"enum": ["not_applicable", "proposed", "kept", "missed", "unknown"]},
+    "synthetic": {"const": true},
+    "simulation": {"const": true}
+  }
+}

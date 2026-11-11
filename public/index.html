@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIGEC-EC v2.0 | Sistema Integral de Cobranzas MYPE — Ecuador</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            navy: { 900: '#0F2544', 800: '#1A365D', 700: '#2B6CB0' },
+            tealbrand: { 600: '#0D9488', 500: '#14B8A6' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #F1F5F9; color: #1E293B; }
+    .metric-card { background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFC 100%); border: 1px solid #E2E8F0; border-radius: 12px; padding: 1.1rem; box-shadow: 0 2px 6px rgba(15, 37, 68, 0.05); transition: transform .15s ease, box-shadow .15s ease; }
+    .metric-card:hover { transform: translateY(-2px); box-shadow: 0 8px 16px rgba(15, 37, 68, 0.08); }
+    .nav-btn.active { background: #1A365D; color: #FFFFFF; font-weight: 600; box-shadow: 0 2px 6px rgba(26,54,93,0.25); }
+    .tab-btn.active { border-bottom: 3px solid #0D9488; color: #1A365D; font-weight: 700; }
+    .swot-card { border-radius: 10px; padding: 1.15rem; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+    .badge-sim { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+    .scroll-table { max-height: 440px; overflow: auto; }
+    thead th { position: sticky; top: 0; background: #1A365D; color: #FFFFFF; z-index: 5; }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col lg:flex-row">
+
+  <!-- MOBILE HEADER -->
+  <header class="lg:hidden bg-navy-800 text-white px-4 py-3 flex items-center justify-between shadow-md sticky top-0 z-30">
+    <div class="flex items-center gap-2">
+      <span class="text-xl">⚖️</span>
+      <div>
+        <div class="font-bold text-sm leading-tight">SIGEC-EC v2.0</div>
+        <div class="text-[11px] text-slate-300">Gestión Estratégica de Cobranzas</div>
+      </div>
+    </div>
+    <button id="mobileMenuBtn" class="px-3 py-1.5 rounded bg-navy-700 text-xs font-semibold">Menú</button>
+  </header>
+
+  <!-- SIDEBAR -->
+  <aside id="sidebar" class="hidden lg:flex lg:flex-col w-full lg:w-80 bg-white border-r border-slate-200 p-5 shrink-0 lg:min-h-screen lg:sticky lg:top-0 lg:max-h-screen overflow-y-auto z-20">
+    <div class="flex items-center gap-3 mb-2">
+      <div class="w-11 h-11 rounded-xl bg-navy-800 text-white flex items-center justify-center text-2xl shadow">⚖️</div>
+      <div>
+        <h1 class="text-xl font-extrabold text-navy-800 tracking-tight">SIGEC-EC v2.0</h1>
+        <p class="text-xs text-slate-500">Inteligencia de Cobranzas | Ecuador</p>
+      </div>
+    </div>
+
+    <div class="my-3 px-3 py-1.5 rounded-lg text-[11px] font-bold text-center badge-sim">
+      SIMULACIÓN CALIBRADA · CARTERA SINTÉTICA MYPE
+    </div>
+
+    <p class="text-xs font-bold uppercase tracking-wider text-slate-400 mt-2 mb-2">Módulos Operativos</p>
+    <nav id="navMenu" class="space-y-1.5">
+      <button data-mod="mod1" class="nav-btn active w-full text-left px-3 py-2.5 rounded-lg text-sm text-slate-700 hover:bg-slate-100 transition">📊 1. Dashboard Ejecutivo &amp; KPIs</button>
+      <button data-mod="mod2" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm text-slate-700 hover:bg-slate-100 transition">🗂️ 2. Explorador &amp; Segmentación</button>
+      <button data-mod="mod3" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm text-slate-700 hover:bg-slate-100 transition">🎯 3. Cockpit 1 a 1 (Negociación)</button>
+      <button data-mod="mod4" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm text-slate-700 hover:bg-slate-100 transition">📍 4. Rutas de Campo (Visitas MYPE)</button>
+      <button data-mod="mod5" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm text-slate-700 hover:bg-slate-100 transition">🎲 5. Motor Estocástico &amp; Markov</button>
+      <button data-mod="mod6" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm text-slate-700 hover:bg-slate-100 transition">🧭 6. Tablero FODA &amp; Explicabilidad</button>
+      <button data-mod="mod7" class="nav-btn w-full text-left px-3 py-2.5 rounded-lg text-sm text-slate-700 hover:bg-slate-100 transition">⚖️ 7. Compliance Legal &amp; Exportador IA</button>
+    </nav>
+
+    <hr class="my-4 border-slate-200" />
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-xs font-bold uppercase tracking-wider text-slate-500">Filtros Globales</h2>
+      <button id="resetFiltersBtn" class="text-xs text-tealbrand-600 hover:underline font-semibold">Restablecer</button>
+    </div>
+
+    <div class="space-y-3 text-xs">
+      <div>
+        <label class="block font-semibold text-slate-600 mb-1" for="fltBalde">Balde de Mora</label>
+        <select id="fltBalde" class="w-full border border-slate-300 rounded-lg px-2.5 py-2 bg-slate-50 text-slate-800"></select>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-600 mb-1" for="fltParroquia">Parroquia (DM Quito)</label>
+        <select id="fltParroquia" class="w-full border border-slate-300 rounded-lg px-2.5 py-2 bg-slate-50 text-slate-800"></select>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-600 mb-1" for="fltSector">Sector Productivo</label>
+        <select id="fltSector" class="w-full border border-slate-300 rounded-lg px-2.5 py-2 bg-slate-50 text-slate-800"></select>
+      </div>
+      <div>
+        <label class="block font-semibold text-slate-600 mb-1" for="fltPresc">Estado de Prescripción</label>
+        <select id="fltPresc" class="w-full border border-slate-300 rounded-lg px-2.5 py-2 bg-slate-50 text-slate-800">
+          <option value="Todos">Todos</option>
+          <option value="Alertas">Solo Alertas (&lt;12m y &lt;6m)</option>
+          <option value="Vigente">Acción Legal Vigente</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mt-4 p-3 rounded-lg bg-slate-100 border border-slate-200 text-xs space-y-1">
+      <div class="flex justify-between"><span class="text-slate-600">Registros filtrados:</span><strong id="sideCount" class="text-navy-800">-</strong></div>
+      <div class="flex justify-between"><span class="text-slate-600">Saldo filtrado:</span><strong id="sideSaldo" class="text-tealbrand-600">-</strong></div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 p-5 lg:p-8 max-w-[1600px] w-full">
+    <div id="loadingBanner" class="bg-white border border-slate-200 rounded-xl p-8 text-center shadow-sm">
+      <div class="text-3xl mb-2">⏳</div>
+      <div class="font-bold text-navy-800">Cargando cartera calibrada multidimensional (1.000 casos MYPE)...</div>
+    </div>
+
+    <!-- MODULE 1: DASHBOARD -->
+    <section id="mod1" class="mod-section hidden space-y-6">
+      <div>
+        <h2 class="text-2xl font-extrabold text-navy-800">📊 Dashboard Ejecutivo &amp; Análisis Macro de Cartera</h2>
+        <p class="text-sm text-slate-600 mt-1">Visión integral del portafolio MYPE en mora prejudicial y administrativa. Métricas calibradas para maximizar el valor incremental de recuperación.</p>
+      </div>
+      <div id="kpiGrid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4"></div>
+      <div class="grid grid-cols-1 xl:grid-cols-5 gap-5">
+        <div class="xl:col-span-3 bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h3 class="font-bold text-navy-800 text-sm mb-2">Distribución de Cartera por Baldes de Mora (Aging Buckets)</h3>
+          <div id="chartBuckets" class="h-[340px]"></div>
+        </div>
+        <div class="xl:col-span-2 bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h3 class="font-bold text-navy-800 text-sm mb-2">Segmentación por Perfil Conductual Observado</h3>
+          <div id="chartPerfiles" class="h-[340px]"></div>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 xl:grid-cols-2 gap-5">
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h3 class="font-bold text-navy-800 text-sm mb-2">Concentración Territorial en Quito (Parroquias DMQ)</h3>
+          <div id="chartParroquias" class="h-[340px]"></div>
+        </div>
+        <div class="bg-white rounded-xl border border-slate-200 p-4 shadow-sm">
+          <h3 class="font-bold text-navy-800 text-sm mb-2">Relación Días de Mora vs. Saldo (Probabilidad Calibrada)</h3>
+          <div id="chartScatter" class="h-[340px]"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULE 2: EXPLORADOR -->
+    <section id="mod2" class="mod-section hidden space-y-5">
+      <div>
+        <h2 class="text-2xl font-extrabold text-navy-800">🗂️ Explorador &amp; Segmentación Analítica de Cartera</h2>
+        <p class="text-sm text-slate-600 mt-1">Auditoría tabular detallada con compuertas duras de contención normativa.</p>
+      </div>
+      <div class="flex flex-wrap gap-2 border-b border-slate-200 bg-white px-4 pt-2 rounded-t-xl">
+        <button class="exp-tab tab-btn active px-3 py-2 text-sm" data-tab="expHabilitados">📋 Cartera Habilitada</button>
+        <button class="exp-tab tab-btn px-3 py-2 text-sm text-slate-600" data-tab="expBloqueados">🛑 Puertas Duras de Contención (Bloqueados)</button>
+        <button class="exp-tab tab-btn px-3 py-2 text-sm text-slate-600" data-tab="expPrescripcion">⚠️ Cola de Urgencia por Prescripción</button>
+      </div>
+
+      <div id="expHabilitados" class="exp-pane bg-white p-4 rounded-b-xl border border-t-0 border-slate-200 shadow-sm space-y-3">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <input id="searchTableInput" type="text" placeholder="Buscar por ID (ej. SIM-00004), parroquia o sector..." class="border border-slate-300 rounded-lg px-3 py-1.5 text-sm w-72" />
+            <span id="habCountLbl" class="text-xs text-slate-500 font-semibold"></span>
+          </div>
+          <button id="downloadHabCsv" class="px-4 py-2 rounded-lg bg-navy-800 text-white text-xs font-bold hover:bg-navy-700">📥 Descargar Cartera Habilitada (CSV)</button>
+        </div>
+        <div class="scroll-table border border-slate-200 rounded-lg">
+          <table class="w-full text-xs text-left">
+            <thead>
+              <tr>
+                <th class="p-2.5">ID Caso</th><th class="p-2.5">Parroquia</th><th class="p-2.5">Sector MYPE</th>
+                <th class="p-2.5 text-right">Saldo USD</th><th class="p-2.5 text-right">Mora</th><th class="p-2.5">Balde</th>
+                <th class="p-2.5">Perfil Conductual</th><th class="p-2.5 text-right">Prob. 30d</th><th class="p-2.5">Vía COGEP</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyHabilitados" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="expBloqueados" class="exp-pane hidden bg-white p-4 rounded-b-xl border border-t-0 border-slate-200 shadow-sm space-y-3">
+        <div class="bg-red-50 border-l-4 border-red-600 p-3 rounded text-xs text-red-900">
+          <strong>ADVERTENCIA DE AUDITORÍA (Fase 0 de Contención):</strong> Prohibición estricta de contacto telefónico, mensajes masivos o visitas de campo. Cualquier gestión sobre estas cuentas vulnera el Art. 49 de la Ley Orgánica de Defensa del Consumidor o la LOPDP.
+        </div>
+        <div class="scroll-table border border-slate-200 rounded-lg">
+          <table class="w-full text-xs text-left">
+            <thead>
+              <tr>
+                <th class="p-2.5">ID Caso</th><th class="p-2.5">Parroquia</th><th class="p-2.5">Sector</th>
+                <th class="p-2.5 text-right">Saldo USD</th><th class="p-2.5">Balde</th><th class="p-2.5">Disputa Saldo</th>
+                <th class="p-2.5">Consentimiento LOPDP</th><th class="p-2.5">Motivo Declarado</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyBloqueados" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="expPrescripcion" class="exp-pane hidden bg-white p-4 rounded-b-xl border border-t-0 border-slate-200 shadow-sm space-y-3">
+        <div id="prescSummaryBanner" class="bg-teal-50 border-l-4 border-tealbrand-600 p-3 rounded text-xs text-teal-900"></div>
+        <div class="scroll-table border border-slate-200 rounded-lg">
+          <table class="w-full text-xs text-left">
+            <thead>
+              <tr>
+                <th class="p-2.5">ID Caso</th><th class="p-2.5">Parroquia</th><th class="p-2.5">Sector</th>
+                <th class="p-2.5 text-right">Saldo USD</th><th class="p-2.5 text-right">Mora (d)</th><th class="p-2.5 text-right">Días Presc.</th>
+                <th class="p-2.5">Estado Prescripción</th><th class="p-2.5">Título Ejecutivo</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyPrescripcion" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULE 3: COCKPIT 1 A 1 -->
+    <section id="mod3" class="mod-section hidden space-y-5">
+      <div>
+        <h2 class="text-2xl font-extrabold text-navy-800">🎯 Cockpit del Gestor 1 a 1: Ficha 360° &amp; Negociación</h2>
+        <p class="text-sm text-slate-600 mt-1">Consola operativa individual para la preparación, desescalamiento empático y cierre de acuerdos.</p>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row sm:items-center gap-3">
+        <label for="cockpitSelect" class="text-sm font-bold text-navy-800">Expediente del Cliente:</label>
+        <select id="cockpitSelect" class="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-slate-50 flex-1 max-w-md"></select>
+      </div>
+      <div id="cockpitBody" class="space-y-5"></div>
+    </section>
+
+    <!-- MODULE 4: RUTAS DE CAMPO -->
+    <section id="mod4" class="mod-section hidden space-y-5">
+      <div>
+        <h2 class="text-2xl font-extrabold text-navy-800">📍 Planificador de Rutas de Campo: Visitas Presenciales MYPE</h2>
+        <p class="text-sm text-slate-600 mt-1">Filtro logístico territorial para clientes con alto valor incremental (saldos ≥ $3.000 incontactables o alertas de prescripción).</p>
+      </div>
+      <div id="rutaKpis" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
+          <h3 class="font-bold text-navy-800 text-sm">Filtro por Parroquia (DMQ)</h3>
+          <select id="rutaParroquiaSelect" class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm bg-slate-50"></select>
+          <div id="rutaBadgeInfo" class="bg-blue-50 border border-blue-200 text-blue-900 p-3 rounded-lg text-xs font-semibold"></div>
+        </div>
+        <div class="lg:col-span-2 bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <h3 class="font-bold text-navy-800 text-sm mb-2">Distribución de Visitas por Parroquia</h3>
+          <div id="chartRutas" class="h-[250px]"></div>
+        </div>
+      </div>
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm space-y-3">
+        <h3 class="font-bold text-navy-800 text-sm">Hoja de Ruta Priorizada por Saldo</h3>
+        <div class="scroll-table border border-slate-200 rounded-lg max-h-[300px]">
+          <table class="w-full text-xs text-left">
+            <thead>
+              <tr>
+                <th class="p-2.5">ID Caso</th><th class="p-2.5">Parroquia</th><th class="p-2.5">Sector Productivo</th>
+                <th class="p-2.5 text-right">Saldo USD</th><th class="p-2.5 text-right">Mora</th><th class="p-2.5">Balde</th>
+                <th class="p-2.5">Último Contacto</th><th class="p-2.5">Prescripción</th>
+              </tr>
+            </thead>
+            <tbody id="tbodyRutas" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+          <h3 class="font-bold text-navy-800 text-base">📝 Registro de Visita en Campo (Persistencia Local)</h3>
+          <button id="downloadVisitasCsv" class="px-3 py-1.5 rounded-lg bg-tealbrand-600 text-white text-xs font-bold hover:bg-teal-700">📥 Exportar Bitácora de Visitas (CSV)</button>
+        </div>
+        <form id="visitaForm" class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">ID Caso Visitado</label>
+            <select id="visitaCasoId" class="w-full border border-slate-300 rounded-lg px-2.5 py-2 bg-slate-50"></select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Resultado de Intervención</label>
+            <select id="visitaResultado" class="w-full border border-slate-300 rounded-lg px-2.5 py-2 bg-slate-50">
+              <option>Acuerdo cerrado con abono inicial pactado</option>
+              <option>Solicitud formal de reestructuración MYPE</option>
+              <option>Inspección de garantías / Negocio en operación</option>
+              <option>Negocio cerrado temporalmente / Re-visitar</option>
+              <option>Titular renuente / Derivación a juicio ejecutivo</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Monto Comprometido (USD)</label>
+            <input id="visitaMonto" type="number" min="0" step="50" value="500" class="w-full border border-slate-300 rounded-lg px-2.5 py-2" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Fecha de Visita</label>
+            <input id="visitaFecha" type="date" class="w-full border border-slate-300 rounded-lg px-2.5 py-2" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Fecha Límite de Cumplimiento</label>
+            <input id="visitaFechaLimite" type="date" class="w-full border border-slate-300 rounded-lg px-2.5 py-2" />
+          </div>
+          <div>
+            <label class="block font-semibold text-slate-700 mb-1">Observaciones</label>
+            <input id="visitaObs" type="text" placeholder="Detalle del negocio, stock o acuerdo..." class="w-full border border-slate-300 rounded-lg px-2.5 py-2" />
+          </div>
+          <div class="md:col-span-3">
+            <button type="submit" class="px-5 py-2.5 rounded-lg bg-navy-800 text-white font-bold hover:bg-navy-700">💾 Guardar Registro de Visita en Bitácora</button>
+          </div>
+        </form>
+        <div id="visitaLogBox" class="text-xs text-slate-600"></div>
+      </div>
+    </section>
+
+    <!-- MODULE 5: STOCHASTIC -->
+    <section id="mod5" class="mod-section hidden space-y-5">
+      <div>
+        <h2 class="text-2xl font-extrabold text-navy-800">🎲 Motor Estocástico &amp; Simulación Predictiva</h2>
+        <p class="text-sm text-slate-600 mt-1">Cadenas de Markov para proyección de rodamiento (Roll Rates) y simulación Monte Carlo en tiempo real.</p>
+      </div>
+      <div class="flex flex-wrap gap-2 border-b border-slate-200 bg-white px-4 pt-2 rounded-t-xl">
+        <button class="stoch-tab tab-btn active px-3 py-2 text-sm" data-tab="stochMarkov">📈 Matriz de Transición Markov</button>
+        <button class="stoch-tab tab-btn px-3 py-2 text-sm text-slate-600" data-tab="stochMonteCarlo">🎰 Simulación Monte Carlo</button>
+      </div>
+      <div id="stochMarkov" class="stoch-pane bg-white p-5 rounded-b-xl border border-t-0 border-slate-200 shadow-sm space-y-3">
+        <h3 class="font-bold text-navy-800 text-sm">Matriz de Transición Mensual P(Balde t+1 | Balde t)</h3>
+        <div id="chartMarkov" class="h-[440px]"></div>
+        <div class="bg-blue-50 border-l-4 border-blue-600 p-3 rounded text-xs text-blue-900">
+          💡 <strong>Lectura de Riesgo:</strong> El tramo B3 (61–90 días) presenta un <strong>32% de probabilidad de rodar a B4</strong> (cartera vencida formal) si no se ejecuta una intervención presencial inmediata.
+        </div>
+      </div>
+      <div id="stochMonteCarlo" class="stoch-pane hidden bg-white p-5 rounded-b-xl border border-t-0 border-slate-200 shadow-sm">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Trayectorias Monte Carlo: <span id="mcIterLbl" class="text-navy-800">1000</span></label>
+              <input id="mcIter" type="range" min="200" max="2000" step="200" value="1000" class="w-full accent-tealbrand-600" />
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-slate-700 mb-1">Descuento Promedio Condonación: <span id="mcDescLbl" class="text-navy-800">12%</span></label>
+              <input id="mcDesc" type="range" min="0" max="30" step="1" value="12" class="w-full accent-tealbrand-600" />
+            </div>
+            <div id="mcMetrics" class="space-y-2.5"></div>
+          </div>
+          <div class="lg:col-span-2">
+            <div id="chartMonteCarlo" class="h-[380px]"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULE 6: FODA & EXPLICABILIDAD -->
+    <section id="mod6" class="mod-section hidden space-y-5">
+      <div>
+        <h2 class="text-2xl font-extrabold text-navy-800">🧭 Tablero Estratégico FODA &amp; Explicabilidad Algorítmica (Caja Blanca)</h2>
+        <p class="text-sm text-slate-600 mt-1">Diagnóstico FODA cuantitativo, matriz empírica de correlaciones Pearson y trazabilidad deductiva por cliente.</p>
+      </div>
+      <div class="flex flex-wrap gap-2 border-b border-slate-200 bg-white px-4 pt-2 rounded-t-xl">
+        <button class="foda-tab tab-btn active px-3 py-2 text-sm" data-tab="fodaSwot">📊 Matriz FODA Cuantitativa</button>
+        <button class="foda-tab tab-btn px-3 py-2 text-sm text-slate-600" data-tab="fodaCorr">🔬 Metodología &amp; Correlaciones</button>
+        <button class="foda-tab tab-btn px-3 py-2 text-sm text-slate-600" data-tab="fodaTrace">⚙️ Trazabilidad 'Auditá tu Cliente'</button>
+      </div>
+
+      <div id="fodaSwot" class="foda-pane bg-white p-5 rounded-b-xl border border-t-0 border-slate-200 shadow-sm space-y-5">
+        <div id="swotCardsGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-4 text-xs leading-relaxed"></div>
+        <div id="swotMetricsRow" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4"></div>
+      </div>
+
+      <div id="fodaCorr" class="foda-pane hidden bg-white p-5 rounded-b-xl border border-t-0 border-slate-200 shadow-sm space-y-4">
+        <h3 class="font-bold text-navy-800 text-sm">Matriz de Correlación Lineal de Pearson (Calculada sobre los 1.000 Registros)</h3>
+        <div id="chartCorr" class="h-[520px]"></div>
+        <div class="bg-slate-50 border border-slate-200 rounded-lg p-4 text-xs space-y-2 text-slate-700">
+          <p><strong>1. Días de Mora vs. Probabilidad de Pago (r = −0,84):</strong> Fuerte relación inversa; la mora avanzada deteriora la recuperación voluntaria.</p>
+          <p><strong>2. Días de Mora vs. Pagos en 12 Meses (r = −0,89):</strong> La suspensión de abonos periódicos es el predictor más limpio de deterioro.</p>
+          <p><strong>3. Días de Mora vs. Interés de Mora (r = +0,80):</strong> Los recargos moratorios acumulados actúan como barrera psicológica para el microempresario.</p>
+          <p><strong>4. Kept Rate vs. Probabilidad de Pago (r = +0,36):</strong> Quienes cumplieron ≥ 50% de promesas duplican la tasa de cierre efectivo.</p>
+          <p><strong>5. Días de Mora vs. Días Prescripción (r = −1,00):</strong> Relación lineal determinística (1.095 días − días de mora).</p>
+        </div>
+      </div>
+
+      <div id="fodaTrace" class="foda-pane hidden bg-white p-5 rounded-b-xl border border-t-0 border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+          <label for="auditClientSelect" class="text-sm font-bold text-navy-800">Cliente a Auditar Algorítmicamente:</label>
+          <select id="auditClientSelect" class="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-slate-50 max-w-md flex-1"></select>
+        </div>
+        <div id="auditClientOutput" class="space-y-4"></div>
+      </div>
+    </section>
+
+    <!-- MODULE 7: COMPLIANCE & EXPORT -->
+    <section id="mod7" class="mod-section hidden space-y-5">
+      <div>
+        <h2 class="text-2xl font-extrabold text-navy-800">⚖️ Auditoría Normativa Ecuador &amp; Exportador Multi-LLM / NotebookLM</h2>
+        <p class="text-sm text-slate-600 mt-1">Verificación de cumplimiento normativo estricto y generación de expedientes para modelos de lenguaje.</p>
+      </div>
+      <div class="flex flex-wrap gap-2 border-b border-slate-200 bg-white px-4 pt-2 rounded-t-xl">
+        <button class="comp-tab tab-btn active px-3 py-2 text-sm" data-tab="compMarco">📜 Marco Regulatorio Ecuatoriano</button>
+        <button class="comp-tab tab-btn px-3 py-2 text-sm text-slate-600" data-tab="compExport">🧠 Exportador NotebookLM / LLM</button>
+      </div>
+      <div id="compMarco" class="comp-pane bg-white p-5 rounded-b-xl border border-t-0 border-slate-200 shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left border border-slate-200">
+            <thead>
+              <tr>
+                <th class="p-3">Cuerpo Legal</th><th class="p-3">Materia</th><th class="p-3">Riesgo Institucional</th><th class="p-3">Regla Operativa en Sistema</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200">
+              <tr><td class="p-3 font-bold">Ley Orgánica de Defensa del Consumidor (Art. 49)</td><td class="p-3">Prácticas Coercitivas Prohibidas</td><td class="p-3">Sanciones pecuniarias y multas administrativas.</td><td class="p-3">Prohibición de hostigamiento, llamadas reiteradas, exhibición ante terceros y cartas simulando mandamientos judiciales falsos.</td></tr>
+              <tr><td class="p-3 font-bold">Regulación Horaria Nacional (JPRF / SB / SEPS)</td><td class="p-3">Ventana Legal Única de Contacto</td><td class="p-3">Nulidad de requerimientos y sanciones regulatorias.</td><td class="p-3">Lunes a Viernes 08:00–19:00; Sábados 09:00–13:00. Prohibición total domingos y feriados.</td></tr>
+              <tr><td class="p-3 font-bold">Ley Orgánica de Protección de Datos Personales (LOPDP)</td><td class="p-3">Principio de Confidencialidad</td><td class="p-3">Multas hasta el 1% de la facturación institucional.</td><td class="p-3">Validación de 4 dígitos previa a revelar saldos. Cero comunicación a familiares, cónyuges o empleadores.</td></tr>
+              <tr><td class="p-3 font-bold">Código Orgánico Integral Penal (COIP Art. 154)</td><td class="p-3">Delito de Intimidación</td><td class="p-3">Pena privativa de libertad de 1 a 3 años.</td><td class="p-3">Prohibición estricta de amenazas de cárcel o detención policial (Art. 66 num. 29 CRE).</td></tr>
+              <tr><td class="p-3 font-bold">Código de Comercio (Art. 479)</td><td class="p-3">Prescripción Acción Cambiaria</td><td class="p-3">Pérdida de fuerza ejecutiva del título valor.</td><td class="p-3">Pagarés y letras prescriben a los 3 años (1.095 días) sin interrupción procesal.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div id="compExport" class="comp-pane hidden bg-white p-5 rounded-b-xl border border-t-0 border-slate-200 shadow-sm space-y-4">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+          <label for="exportSelect" class="text-sm font-bold text-navy-800">Expediente a Exportar:</label>
+          <select id="exportSelect" class="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-slate-50 max-w-md flex-1"></select>
+          <button id="downloadMdBtn" class="px-4 py-2 rounded-lg bg-navy-800 text-white text-xs font-bold hover:bg-navy-700">📥 Descargar Markdown (.md)</button>
+        </div>
+        <textarea id="exportMdPreview" rows="16" class="w-full border border-slate-300 rounded-lg p-3 font-mono text-xs bg-slate-50"></textarea>
+      </div>
+    </section>
+  </main>
+
+  <script src="/app.js"></script>
+</body>
+</html>
